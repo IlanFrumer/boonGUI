@@ -11,6 +11,8 @@ class ProfilePanel
 
 		// Playerlist selection
 		this.selectedPlayer = undefined;
+		
+		this.info = Engine.ConfigDB_GetValue("user", "lobby.login");
 
 		this.rankIcon = Engine.GetGUIObjectByName("rankIcon");
 		this.roleText = Engine.GetGUIObjectByName("roleText");
@@ -97,14 +99,22 @@ class ProfilePanel
 		this.winLossPoints1v1.caption = "";
 
 		Engine.SendGetProfile(playerName);
+		Engine.SendGetProfile(this.info);
 	}
 
 	onProfile()
 	{
 		let attributes = Engine.GetProfile()[0];
+
+		if (attributes.player == this.info) 
+		{
+			this.isMyRating = attributes.rating;
+			this.isMyGames = attributes.totalGamesPlayed;
+		}
+			
 		if (attributes.rating == "-2" || attributes.player != this.requestedPlayer)
 			return;
-
+			
 		this.playernameText.caption = PlayerColor.ColorPlayerName(escapeText(attributes.player), attributes.rating);
 		this.updatePlayerRoleText(attributes.player);
 
@@ -118,7 +128,7 @@ class ProfilePanel
 		this.lossesText.caption = attributes.losses;
 		
 		// I need to get the information about the rating and the total number of games from the player who is logged in the lobby.
-		this.winLossPoints1v1.caption = winLossPointsELO(1434, attributes.rating, 65);
+		this.winLossPoints1v1.caption = winLossPointsELO(this.isMyRating || g_DefaultLobbyRating, attributes.rating, this.isMyGames || 0);
 		
 		let ratingNumberIcon = parseInt(attributes.rating, 10);
 			if (attributes.rank == "1") {

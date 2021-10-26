@@ -42,12 +42,9 @@ var ELO_SURE_WIN_DIFFERENCE = 600;
 var ELO_K_FACTOR_CONSTANT_RATING = 2200;
 var VOLATILITY_CONSTANT = 20;
 var ANTI_INFLATION = 0.015;
-
-// Player ratings are -1 unless they have played a rated game.
-if (rating == -1) 
-return rating = g_DefaultLobbyRating;
-if (opponent_rating == -1)
-return opponent_rating = g_DefaultLobbyRating;
+rating = parseInt(rating, 10);
+opponent_rating = parseInt(opponent_rating, 10);
+games_played = parseInt(games_played, 10);
             
 let rating_k_factor = 50.0 * (Math.min(rating, ELO_K_FACTOR_CONSTANT_RATING) / ELO_K_FACTOR_CONSTANT_RATING + 1.0) / 2.0;
 let player_volatility = (Math.min(Math.max(0, (games_played || 0)+1), VOLATILITY_CONSTANT) / VOLATILITY_CONSTANT + 0.25) / 1.25;
