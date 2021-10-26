@@ -25,9 +25,6 @@
 			<translatableAttribute id="caption">Losses:</translatableAttribute>
 		</object>
 		<object name="lossesText" size="40%+45 150 100% 170" type="text" style="ModernLeftLabelText" font="sans-stroke-16" textcolor="200 0 0"/>
-		<object size="0 170 40%+40 190" type="text" style="ModernRightLabelText" font="sans-bold-stroke-14">
-			<translatableAttribute id="caption">Win Rate:</translatableAttribute>
-		</object>
-		<object name="ratioText" size="40%+45 170 100% 190" type="text" style="ModernLeftLabelText" font="sans-stroke-16" />
+		<object name="winLossPoints1v1" size="0 170 100% 190" type="text" style="ModernLabelText" font="sans-stroke-16" />
 	</object>
 </object>

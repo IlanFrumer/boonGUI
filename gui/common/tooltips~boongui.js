@@ -31,4 +31,40 @@ function makeColorsVivid(oldColor) {
       return g_vividColorsGamesetup.vividPink;
   else 
   return oldColor;
+};
+
+function winLossPointsELO(rating, opponent_rating, games_played)
+{
+// keep it in sync with elo.py
+var RESULT_WIN = 1;
+var RESULT_LOSS = -1;
+var ELO_SURE_WIN_DIFFERENCE = 600;
+var ELO_K_FACTOR_CONSTANT_RATING = 2200;
+var VOLATILITY_CONSTANT = 20;
+var ANTI_INFLATION = 0.015;
+
+// Player ratings are -1 unless they have played a rated game.
+if (rating == -1) 
+return rating = g_DefaultLobbyRating;
+if (opponent_rating == -1)
+return opponent_rating = g_DefaultLobbyRating;
+            
+let rating_k_factor = 50.0 * (Math.min(rating, ELO_K_FACTOR_CONSTANT_RATING) / ELO_K_FACTOR_CONSTANT_RATING + 1.0) / 2.0;
+let player_volatility = (Math.min(Math.max(0, (games_played || 0)+1), VOLATILITY_CONSTANT) / VOLATILITY_CONSTANT + 0.25) / 1.25;
+let volatility = rating_k_factor * player_volatility;
+let rating_difference = opponent_rating - rating;
+let rating_adjustment_win = (rating_difference + RESULT_WIN * ELO_SURE_WIN_DIFFERENCE) / volatility - ANTI_INFLATION;
+let rating_adjustment_lost = (rating_difference + RESULT_LOSS * ELO_SURE_WIN_DIFFERENCE) / volatility - ANTI_INFLATION;
+
+let points_you_gain = (Math.round(Math.max(0.0, rating_adjustment_win)));
+let points_you_lose = (Math.round(Math.min(0.0, rating_adjustment_lost)));
+let new_rating_win = rating + points_you_gain;
+let new_rating_lose = rating + points_you_lose;
+
+return sprintf("1v1: %(gain)s / %(lose)s", {
+		"gain": coloredText(points_you_gain + " (" + new_rating_win + ")", "green"),
+		"lose": coloredText(points_you_lose + " (" + new_rating_lose + ")", "red")
+		})
 }
+
+

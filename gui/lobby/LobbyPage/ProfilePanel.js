@@ -14,7 +14,7 @@ class ProfilePanel
 
 		this.rankIcon = Engine.GetGUIObjectByName("rankIcon");
 		this.roleText = Engine.GetGUIObjectByName("roleText");
-		this.ratioText = Engine.GetGUIObjectByName("ratioText");
+		this.winLossPoints1v1 = Engine.GetGUIObjectByName("winLossPoints1v1");
 		this.lossesText = Engine.GetGUIObjectByName("lossesText");
 		this.winsText = Engine.GetGUIObjectByName("winsText");
 		this.totalGamesText = Engine.GetGUIObjectByName("totalGamesText");
@@ -94,7 +94,7 @@ class ProfilePanel
 		this.totalGamesText.caption = this.NotAvailable;
 		this.winsText.caption = this.NotAvailable;
 		this.lossesText.caption = this.NotAvailable;
-		this.ratioText.caption = this.NotAvailable;
+		this.winLossPoints1v1.caption = "";
 
 		Engine.SendGetProfile(playerName);
 	}
@@ -111,9 +111,13 @@ class ProfilePanel
 		this.rankText.caption = attributes.rank;
 		this.highestRatingText.caption = attributes.highestRating;
 		this.totalGamesText.caption = attributes.totalGamesPlayed;
-		this.winsText.caption = attributes.wins;
+		this.winsText.caption = sprintf("%(win)s (%(percentage)s)", {
+			"win": attributes.wins,
+			"percentage" : ProfilePanel.FormatWinRate(attributes)
+			});
 		this.lossesText.caption = attributes.losses;
-		this.ratioText.caption = ProfilePanel.FormatWinRate(attributes);
+		this.winLossPoints1v1.caption = winLossPointsELO(1434, attributes.rating, 65);
+		
 		let ratingNumberIcon = parseInt(attributes.rating, 10);
 			if (attributes.rank == "1") {
 				this.roleText.caption = "Ruler";
