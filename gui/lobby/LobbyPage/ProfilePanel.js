@@ -116,6 +116,8 @@ class ProfilePanel
 			"percentage" : ProfilePanel.FormatWinRate(attributes)
 			});
 		this.lossesText.caption = attributes.losses;
+		
+		// I need to get the information about the rating and the total number of games from the player who is logged in the lobby.
 		this.winLossPoints1v1.caption = winLossPointsELO(1434, attributes.rating, 65);
 		
 		let ratingNumberIcon = parseInt(attributes.rating, 10);
